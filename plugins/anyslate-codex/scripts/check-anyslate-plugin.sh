@@ -57,6 +57,8 @@ for needle in (
     "recall",
     "checkpoint_session",
     "upload_artifact",
+    "attach_artifact_url",
+    "request_artifact_upload",
     "Do not use ordinary Markdown resource tools for AI Memory",
 ):
     if needle not in skill_text:

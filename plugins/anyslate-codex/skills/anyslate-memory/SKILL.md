@@ -17,7 +17,7 @@ MCP exposes tools; this skill decides when Codex should use them.
 
 AnySlate has two MCP tool families:
 
-- **AI Memory tools**: `recall`, `search_memory`, `find_matching_memory`, `list_memories`, `read_memory`, `import_chat`, `checkpoint_session`, `upload_artifact`, `get_artifact`, `append_decision`, `append_task`, `generate_continuation_prompt`, `get_checkpoint_status`, `get_context_subgraph`, `expand_decision`, `get_related`, `list_handles`.
+- **AI Memory tools**: `recall`, `search_memory`, `find_matching_memory`, `list_memories`, `read_memory`, `import_chat`, `checkpoint_session`, `upload_artifact`, `attach_artifact_url`, `request_artifact_upload`, `get_artifact`, `append_decision`, `append_task`, `generate_continuation_prompt`, `get_checkpoint_status`, `get_context_subgraph`, `expand_decision`, `get_related`, `list_handles`.
 - **Ordinary Markdown resource tools**: `list_resources`, `search_resources`, `read_resource`, `get_resource_versions`, `create_resource`, `update_resource`, `update_resource_section`, `delete_resource`.
 
 Do not use ordinary Markdown resource tools for AI Memory. Resource tools are only for explicit user requests about normal AnySlate Markdown files outside the memory layer.
@@ -54,7 +54,10 @@ Use:
 - `checkpoint_session` for general progress, reasoning, decisions, tests, deployments, blockers, and next actions.
 - `append_decision` for a single important decision that should become a first-class decision.
 - `append_task` for a task/follow-up the user expects to track.
-- `upload_artifact` before referencing a durable generated artifact that should live in AnySlate, such as a markdown report, JSON/YAML config, generated patch summary, test output, design doc, PDF, image, or code bundle.
+- Capture a durable artifact before referencing it. Pick the tool automatically by what you have — never base64-encode a binary:
+  - `attach_artifact_url` — the file is reachable at a public http(s) URL, or your environment can expose it at one. The server fetches the bytes; you spend no tokens encoding them.
+  - `request_artifact_upload` — a binary file you produced locally (image, PDF, diagram, archive, code bundle) with no URL. It returns a one-time `upload_url`; PUT the raw file bytes to it with your normal HTTP tool — no base64.
+  - `upload_artifact` — small inline TEXT only: markdown report, JSON/YAML config, patch summary, test output, design doc, code snippet. This tool rejects binary content.
 
 Keep checkpoint text compact and factual. Do not upload secrets, raw tokens, private keys, `.env` values, full logs with credentials, or unrelated local files.
 

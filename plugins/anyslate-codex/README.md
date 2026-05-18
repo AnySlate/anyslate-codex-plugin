@@ -83,7 +83,7 @@ Codex plugin installation makes AnySlate tools available. The `anyslate-memory` 
 - `read_memory` when recall finds a useful prior session.
 - `import_chat` when a new sustained task needs a memory home.
 - `checkpoint_session` after meaningful progress.
-- `upload_artifact` before referencing durable generated files or reports.
+- `attach_artifact_url` (file at a URL) / `request_artifact_upload` (local binary file) / `upload_artifact` (small inline text) before referencing durable generated artifacts — never base64 a binary.
 - `append_decision` and `append_task` for first-class decisions and follow-ups.
 
 The plugin intentionally does not use ordinary Markdown resource tools for AI Memory. Those tools are only for explicit user requests about normal AnySlate Markdown files.

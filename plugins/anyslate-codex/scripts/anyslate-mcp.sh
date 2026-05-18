@@ -24,6 +24,43 @@ if [ -z "${ANYSLATE_TOKEN:-}" ] && [ -f "$ENV_FILE" ]; then
   set +a
 fi
 
+# Codex spawns MCP servers with a stripped PATH (/usr/bin:/bin:...), which omits
+# Homebrew, /usr/local/bin, and nvm. Without this, `npx` is not found and the
+# bridge never starts. Resolve a node runtime and prepend its bin dir to PATH.
+resolve_node_on_path() {
+  if command -v npx >/dev/null 2>&1 && command -v node >/dev/null 2>&1; then
+    return 0
+  fi
+
+  local candidates=(
+    "/opt/homebrew/bin"
+    "/usr/local/bin"
+    "${HOME}/.volta/bin"
+    "${NVM_DIR:-$HOME/.nvm}/current/bin"
+  )
+
+  # nvm installs each version under versions/node/<ver>/bin; pick the newest.
+  local nvm_versions="${NVM_DIR:-$HOME/.nvm}/versions/node"
+  if [ -d "$nvm_versions" ]; then
+    local latest
+    latest="$(ls -1 "$nvm_versions" 2>/dev/null | sort -V | tail -n 1)"
+    if [ -n "$latest" ]; then
+      candidates+=("$nvm_versions/$latest/bin")
+    fi
+  fi
+
+  local dir
+  for dir in "${candidates[@]}"; do
+    if [ -x "$dir/npx" ] && [ -x "$dir/node" ]; then
+      export PATH="$dir:$PATH"
+      return 0
+    fi
+  done
+  return 1
+}
+
+resolve_node_on_path || true
+
 ANYSLATE_MCP_URL="${ANYSLATE_MCP_URL:-https://mcp.anyslate.io/mcp}"
 
 redact_token() {
@@ -68,8 +105,8 @@ check_runtime() {
   elif [ "$ANYSLATE_TOKEN" = "as_mcp_your_token_here" ]; then
     echo "status: placeholder token; replace it with a real AnySlate token"
     ok=false
-  elif [[ "$ANYSLATE_TOKEN" != as_mcp_* ]]; then
-    echo "status: invalid token prefix; expected as_mcp_"
+  elif [[ "$ANYSLATE_TOKEN" != as_mcp_* && "$ANYSLATE_TOKEN" != as_oauth_* ]]; then
+    echo "status: invalid token prefix; expected as_mcp_ or as_oauth_"
     ok=false
   else
     echo "status: ready"
@@ -129,8 +166,8 @@ EOF
   exit 1
 fi
 
-if [[ "$ANYSLATE_TOKEN" != as_mcp_* ]]; then
-  echo "[anyslate-codex] Invalid ANYSLATE_TOKEN. AnySlate MCP tokens start with as_mcp_." >&2
+if [[ "$ANYSLATE_TOKEN" != as_mcp_* && "$ANYSLATE_TOKEN" != as_oauth_* ]]; then
+  echo "[anyslate-codex] Invalid ANYSLATE_TOKEN. AnySlate MCP tokens start with as_mcp_ or as_oauth_." >&2
   exit 1
 fi
 
