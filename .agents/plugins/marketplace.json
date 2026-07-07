@@ -1,0 +1,25 @@
+{
+  "name": "anyslate",
+  "interface": {
+    "displayName": "AnySlate",
+    "shortDescription": "AnySlate Codex plugin marketplace",
+    "brandColor": "#4F46E5",
+    "composerIcon": "./plugins/anyslate-codex/assets/appicon.png",
+    "icon": "./plugins/anyslate-codex/assets/appicon.png",
+    "logo": "./plugins/anyslate-codex/assets/logo-full-adaptive.png"
+  },
+  "plugins": [
+    {
+      "name": "anyslate-codex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/anyslate-codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+  ]
+}
