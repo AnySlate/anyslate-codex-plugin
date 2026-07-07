@@ -1,0 +1,5 @@
+.env
+.env.*
+codex.env
+*.token
+*.secret
