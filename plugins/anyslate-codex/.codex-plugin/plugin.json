@@ -1,0 +1,48 @@
+{
+  "name": "anyslate-codex",
+  "version": "1.1.4",
+  "description": "Connect Codex to AnySlate AI Memory through MCP with automatic recall, checkpoint, and artifact workflow guidance.",
+  "author": {
+    "name": "AnySlate",
+    "email": "support@anyslate.io",
+    "url": "https://anyslate.io"
+  },
+  "homepage": "https://anyslate.io/docs/codex-plugin",
+  "repository": "https://github.com/AnySlate/anyslate",
+  "license": "MIT",
+  "keywords": [
+    "anyslate",
+    "codex",
+    "mcp",
+    "ai-memory",
+    "memory-layer",
+    "checkpoint",
+    "recall"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "AnySlate",
+    "shortDescription": "Use AnySlate AI Memory automatically from Codex",
+    "longDescription": "AnySlate for Codex connects the AnySlate MCP bridge and adds Codex-specific workflow rules so Codex can recall prior work, checkpoint decisions, persist artifacts, and continue tasks across sessions without mixing AI Memory with ordinary Markdown file tools.",
+    "developerName": "AnySlate",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://anyslate.io",
+    "privacyPolicyURL": "https://anyslate.io/privacy",
+    "termsOfServiceURL": "https://anyslate.io/terms",
+    "defaultPrompt": [
+      "Recall AnySlate context for this repo and continue the work.",
+      "Checkpoint this implementation plan into AnySlate.",
+      "Find prior decisions related to this task."
+    ],
+    "brandColor": "#4F46E5",
+    "composerIcon": "./assets/appicon.png",
+    "logo": "./assets/logo-full-adaptive.png",
+    "screenshots": []
+  }
+}
